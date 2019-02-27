@@ -1,0 +1,29 @@
+version: '3.2'
+
+services:
+
+  todoapi:
+    build:
+      context: ./todoapi
+      dockerfile: Dockerfile
+    volumes:
+      - './todoapi:/app'
+    ports:
+      - '5001:5000'
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=todoapi.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postges@db:5432/novastone_dev
+      - DATABASE_TEST_URL=postgres://postgres:postges@db:5432/novastone_test
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - '5435:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postges
